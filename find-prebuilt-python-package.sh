@@ -13,6 +13,13 @@ declare -a whl_names=( $(curl -sL https://termux-user-repository.github.io/pypi/
 declare -a pipy_names=( $(curl -sL https://pypi.org/pypi/${package}/json | jq -r '.urls[] | select(.packagetype == "bdist_wheel").filename') )
 
 
+# any pip modules can help to used with check.py
+for cmd in "${cmds[@]}"; do
+    PYTHONPATH="$PYTHONPATH:$($cmd -c "import site; print(':'.join(site.getsitepackages() + [site.getusersitepackages()]))")"
+done
+export PYTHONPATH
+
+
 for cmd in "${cmds[@]}"; do
     echo "--------------"
     echo "$(basename $cmd): pipy:"
