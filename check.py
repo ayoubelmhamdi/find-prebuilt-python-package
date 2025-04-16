@@ -43,6 +43,6 @@ is_compatible = any(
 )
 
 if is_compatible:
-    print(f"{filename} is Compatible")
+    print(filename)
 # else:
 #     print(f"{filename} Compatible: {is_compatible}")

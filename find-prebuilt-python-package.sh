@@ -3,9 +3,19 @@
 
 cli="$(dirname $(realpath $0))"
 
+log(){
+    echo "$@" >&2
+}
+
+
+error(){
+    echo "Eror: $@" >&2
+    exit 1
+}
+
 
 package="$1"
-[ -z $package ] && { echo "Error: ./cli numpy"; exit 1;}
+[ -z $package ] && error "./cli numpy"
 
 
 declare -a cmds=( $(find $(echo $PATH | tr ':' ' ') -maxdepth 1 -type f -executable -regex '.*/python3\.[0-9]+' 2>/dev/null) )
@@ -21,16 +31,16 @@ export PYTHONPATH
 
 
 for cmd in "${cmds[@]}"; do
-    echo "--------------"
-    echo "$(basename $cmd): pipy:"
-    echo
+    log "--------------"
+    log "$(basename $cmd): pipy:"
+    log
     for file in "${pipy_names[@]}";do
         "${cmd}" "${cli}/check.py" "$file"
     done
     
-    echo "--------------"
-    echo "$(basename $cmd): https://termux-user-repository.github.io:"
-    echo
+    log "--------------"
+    log "$(basename $cmd): https://termux-user-repository.github.io:"
+    log
     for file in "${whl_names[@]}";do
         "${cmd}" "${cli}/check.py" "$file"
     done
